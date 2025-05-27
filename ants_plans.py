@@ -167,7 +167,7 @@ def create_game_state():
     parser.add_argument('-d', type=str, metavar='DIFFICULTY', help='sets difficulty of game (test/easy/normal/hard/extra-hard)')
     parser.add_argument('-w', '--water', action='store_true', help='loads a full layout with water')
     parser.add_argument('--food', type=int, help='number of food to start with when testing', default=2)
-    args = parser.parse_args()
+    args = parser.parse_args(args=[])
 
     if args.d in ['t', 'test']:
         assault_plan = make_test_assault_plan(ants)
