@@ -1,17 +1,24 @@
 import sys
 sys.path.append('libs') # Include files in the "libs" folder
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO
 from ants_plans import create_game_state
 from ants import *
 import logging, socket
-import webbrowser
+#import webbrowser
+#import eventlet
+#eventlet.monkey_patch()
 
 
 app = Flask(__name__, static_folder='static') # Create flask app
-socketio = SocketIO(app) # Use websocket
+allowed_origins = eval(os.getenv("ALLOWED_ORIGINS"))
+
+socketio = SocketIO(app, cors_allowed_origins=allowed_origins, async_mode='eventlet') # Use websocket
 game, game_state = None, None # Global variable to represent a game and a gamestate
 
 
@@ -290,21 +297,26 @@ def is_port_open(port):
             return False
 
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
+#if True:
+def create_app():
     disable_verbose()
     decorate_events()
     create_new_game()
-    for port in [31415, 8000, 5555, 5000]: # Determining an open port
-        if is_port_open(port):
-            open_port = port
-            break
-    else:
-        raise Exception("Ports 8000, 5555, and 5000 are all occupied")
-    display_messages(open_port)
-    webbrowser.open("http://localhost:" + str(open_port), new=0, autoraise=True)
+    #port_list = [31415, 8000, 5555, 5000]
+#    port_list = [5000]
+#
+#    for port in port_list: # Determining an open port
+#        if is_port_open(port):
+#            open_port = port
+#            break
+#    else:
+#        raise Exception(f"Ports in {port_list} are all occupied")
+#    display_messages(open_port)
+    #webbrowser.open("http://localhost:" + str(open_port), new=0, autoraise=True)
     sys.tracebacklimit = 1
-    socketio.run(app, debug=False, port=open_port)
-
+    #socketio.run(app, debug=False, port=open_port)
+    return app
 
 
 """
