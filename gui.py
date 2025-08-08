@@ -2,6 +2,7 @@ import sys
 sys.path.append('libs') # Include files in the "libs" folder
 
 import os
+import json
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -16,7 +17,7 @@ import logging, socket
 
 
 app = Flask(__name__, static_folder='static') # Create flask app
-allowed_origins = eval(os.getenv("ALLOWED_ORIGINS"))
+allowed_origins = json.loads(os.getenv("ALLOWED_ORIGINS"))
 
 socketio = SocketIO(app, cors_allowed_origins=allowed_origins, async_mode='eventlet') # Use websocket
 game, game_state = None, None # Global variable to represent a game and a gamestate
